@@ -1,72 +1,101 @@
-MODULE integradores
+MODULE integradores2
     IMPLICIT NONE
     CONTAINS
     
-    !Integrador tipo EULER
-    SUBROUTINE euler(W,R,dt)
+    !esta subrutina sirve para calcular la energia potencial de las estrellas entre ellas  
+    SUBROUTINE a_str(eps,m,x,y,z,n,ax,ay,az)
     INTEGER, INTENT (IN):: n
-    REAL, INTENT (INOUT):: x(n), y(n), z(n)
-    REAL, INTENT (INOUT):: vx(n), vy(n), vz(n)
-    REAL, INTENT (IN)   :: ax(n), ay(n), az(n)
-    REAL, INTENT (IN)   :: dt
-    INTEGER             :: i      
-    
+    REAL, INTENT (IN)   :: x(n), y(n), z(n), m(n), eps
+    REAL, INTENT (OUT)  :: ax(n), ay(n), az(n)
+    REAL, PARAMETER     :: G = 4.299e-6
+    REAL                :: acx, acy, acz, dx, dy, dz,dist
+    INTEGER             :: i, j      
+   
 
+    DO i = 1, n  
+        ax(i) = 0.
+        ay(i) = 0.
+        az(i) = 0.
+    END DO
     DO i = 1, n
-        
-        vx(i) = vx(i) + ax(i)*dt
-        vy(i) = vy(i) + ay(i)*dt
-        vz(i) = vz(i) + az(i)*dt
+        DO j = 1, n
+            dx = (x(j)-x(i))
+            dy = (y(j)-y(i))
+            dz = (z(j)-z(i))
 
-        x(i) = x(i) + vx(i)*dt
-        y(i) = y(i) + vy(i)*dt
-        z(i) = z(i) + vz(i)*dt
+            dist = sqrt(dx**2+dy**2+dz**2)
+
+            IF (i /= j) THEN     
+                acx = G*m(j)*dx/(dist**2 + eps**2)**(3/2.)
+                ax(i) = acx + ax(i)
+
+                acy = G*m(j)*dy/(dist**2 + eps**2)**(3/2.)
+                ay(i) = acy + ay(i)
+
+                acz = G*m(j)*dz/(dist**2 + eps**2)**(3/2.)
+                az(i) = acz + az(i)
+
+
+            END IF
+        END DO
     END DO
     END SUBROUTINE
+
+!----------------------------------------------------------------------
+
+    !Integrador tipo EULER
+    SUBROUTINE euler(n,h,x,y,z,vx,vy,vz,ax,ay,az)
+    !euler(n,h,nit,m,eps,x,y,z,vx,vy,vz,ax,ay,az)
+    INTEGER, INTENT (IN):: n,h
+    REAL, INTENT (INOUT):: x(n), y(n), z(n)
+    REAL, INTENT (INOUT):: vx(n), vy(n), vz(n)
+    REAL, INTENT (INOUT):: ax(n), ay(n), az(n)
+    REAL, DIMENSION (n) :: xx, yy, zz, vxx, vyy, vzz 
+    INTEGER             :: i      
     
+    !DO j = 1,nit
+    DO i = 1,n
+        xx(i) = 0.
+        yy(i) = 0.
+        zz(i) = 0.
+        
+        vxx(i) = 0.
+        vyy(i) = 0.
+        vzz(i) = 0.
+     END DO
+
+        DO i = 1,n
+            
+            xx(i) = x(i) + vx(i)*h
+            yy(i) = y(i) + vy(i)*h
+            zz(i) = z(i) + vz(i)*h
+        
+            vxx(i) = vx(i) + ax(i)*h
+            vyy(i) = vy(i) + ay(i)*h
+            vzz(i) = vz(i) + az(i)*h
+
+            x(i) = xx(i)
+            y(i) = yy(i)
+            z(i) = zz(i)
+            
+            vx(i) = vxx(i)
+            vy(i) = vyy(i)
+            vz(i) = vzz(i)
+        
+        !CALL a_str(m,x,y,z,n,eps,ax,ay,az)
+        
+        END DO
+    !END DO
+    END SUBROUTINE
+END MODULE    
     !integrador tipo RUNGE-KUTTA
-    SUBROUTINE rk(m,x,y,z,n,ax,ay,az)
-    INTEGER, INTENT (IN):: n
-    REAL, INTENT (IN)   :: x(n), y(n), z(n), m(n)
-    REAL, INTENT (OUT)  :: ax(n)
-    REAL, INTENT (OUT)  :: ay(n) 
-    REAL, INTENT (OUT)  :: az(n)
-    REAL, PARAMETER     :: G = 4.299e-6
-    REAL                :: acx, acy, acz, dx, dy, dz, eps !,dist
-    INTEGER             :: i, j      
+!    SUBROUTINE rk(m,x,y,z,n,ax,ay,az)
+!    INTEGER, INTENT (IN):: n
+!    REAL, INTENT (IN)   :: x(n), y(n), z(n), m(n)
+!    REAL, INTENT (OUT)  :: ax(n)
+!    REAL, INTENT (OUT)  :: ay(n) 
+!    REAL, INTENT (OUT)  :: az(n)
+!    REAL, PARAMETER     :: G = 4.299e-6
+!   REAL                :: acx, acy, acz, dx, dy, dz, eps !,dist
+!    INTEGER             :: i, j      
     
-SUBROUTINE(w,k,m,r0,g, h)    
-real(8), intent(inout), dimension (7) :: w
-real(8), intent(in) :: k,m,r0,g,h
-real(8), dimension (7) :: k1,k2,k3,k4    
-    
-k1=w
-call funcion(k1,k,m,r0,g,h)
-k2=w+0.5d0*h*k1
-call funcion(k2,k,m,r0,g,h)
-k3=w+0.5d0*h*k2
-call funcion(k3,k,m,r0,g,h)
-k4=w+h*k3
-call funcion(k4,k,m,r0,g,h)
-w=w+(h/6d0)*(k1+2d0*k2+2d0*k3+k4)
-
-END SUBROUTINE
-
-subroutine funcion (f,k,m,r0,g, h)
-implicit none
-real(8), intent(inout), dimension(7) :: f
-real(8), intent (in) :: r0,g,h,k,m
-real(8), dimension(7):: v
-real(8):: r,p
-r= dsqrt(f(1)**2+f(2)**2+f(3)**2)
-p=k/m
-v=f
-v(1)=f(4)
-v(2)=f(5)
-v(3)=f(6)
-v(4)=p*f(1)*(-1.d0+(r0/r))
-v(5)=p*f(2)*(-1.d0+(r0/r))
-v(6)=-g+p*f(3)*(-1.d0+(r0/r))
-f=v
-end subroutine
-
