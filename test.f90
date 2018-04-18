@@ -1,20 +1,19 @@
-PROGRAM test
-
-    USE integradores
-    
+MODULE test
     IMPLICIT NONE
+    CONTAINS
     
+    SUBROUTINE algo(n,x)
+    INTEGER, INTENT (IN) :: n
+    INTEGER, INTENT (OUT) :: x
+!f2py INTENT (IN) :: n
+!f2py INTENT (OUT) :: x
+    INTEGER :: i
+    x = 0
+        
+    DO i = 1, n
+        x  = x + 5
+    END DO
     
-    
-    REAL :: x, y, z, h
-    h = 1.
-    
-    x = 2.
-    y = 3.
-    z = 4.
-    
-    CALL euler(h,x,y,z)
-    
-    WRITE(*,*) x, y, z
-END PROGRAM
+    END SUBROUTINE
+END MODULE
     

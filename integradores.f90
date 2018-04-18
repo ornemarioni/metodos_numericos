@@ -7,6 +7,9 @@ MODULE integradores
     INTEGER, INTENT (IN):: n
     REAL, INTENT (IN)   :: x(n), y(n), z(n), m(n), eps
     REAL, INTENT (OUT)  :: ax(n), ay(n), az(n)
+!f2py INTENT (HIDE)     :: n
+!f2py INTENT (IN)       :: x, y, z , m, eps
+!f2py INTENT (OUT)      :: ax, ay, az
     REAL, PARAMETER     :: G = 4.299e-6
     REAL                :: acx, acy, acz, dx, dy, dz, dist
     INTEGER             :: i, j      
@@ -48,17 +51,17 @@ MODULE integradores
     SUBROUTINE euler(eps,dt,nit,m,x,y,z,vx,vy,vz,ax,ay,az,n)
     !euler(n,h,nit,m,eps,x,y,z,vx,vy,vz,ax,ay,az)
     
-    INTEGER             :: i, j   
+    INTEGER             :: i, j 
     INTEGER, INTENT (IN):: n, nit
     REAL, INTENT (IN)   :: dt, eps, m(n)
     REAL, INTENT (INOUT):: x(n), y(n), z(n)
     REAL, INTENT (INOUT):: vx(n), vy(n), vz(n)
     REAL, INTENT (INOUT):: ax(n), ay(n), az(n)
-!f2py intent(in,out) :: x(n), y(n), z(n)
-!f2py intent(in,out) :: vx(n), vy(n), vz(n)
-!f2py intent(in,out) :: ax(n), ay(n), az(n)
+!f2py INTENT (HIDE)  :: n
+!f2py INTENT(IN,OUT) :: x(n), y(n), z(n)
+!f2py INTENT(IN,OUT) :: vx(n), vy(n), vz(n)
+!f2py INTENT(IN,OUT) :: ax(n), ay(n), az(n)
        
-    
     DO j = 1,nit
 
         DO i = 1,n
@@ -71,18 +74,18 @@ MODULE integradores
             vx(i) = vx(i) + ax(i)*dt
             vy(i) = vy(i) + ay(i)*dt
             vz(i) = vz(i) + az(i)*dt
-
+            
+        END DO
         
         CALL a_str(eps,m,x,y,z,n,ax,ay,az)
         
-        END DO
     END DO
     END SUBROUTINE
     
 !---------------------------------------------------------------
     
 !Integrador tipo RUNGEKUTTA
-    SUBROUTINE runge(eps,dt,nit,m,x,y,z,vx,vy,vz,ax,ay,az,n)
+    SUBROUTINE rungek(eps,dt,nit,m,x,y,z,vx,vy,vz,ax,ay,az,n)
     
     INTEGER             :: i, j
     REAL                :: k1, k2, k3, k4
@@ -91,9 +94,10 @@ MODULE integradores
     REAL, INTENT (INOUT):: x(n), y(n), z(n)
     REAL, INTENT (INOUT):: vx(n), vy(n), vz(n)
     REAL, INTENT (INOUT):: ax(n), ay(n), az(n)
-!f2py intent(in,out) :: x(n), y(n), z(n)
-!f2py intent(in,out) :: vx(n), vy(n), vz(n)
-!f2py intent(in,out) :: ax(n), ay(n), az(n)
+!f2py INTENT (HIDE)  :: n
+!f2py INTENT(IN,OUT) :: x(n), y(n), z(n)
+!f2py INTENT(IN,OUT) :: vx(n), vy(n), vz(n)
+!f2py INTENT(IN,OUT) :: ax(n), ay(n), az(n)
     
     DO j = 1,nit
 
@@ -135,10 +139,11 @@ MODULE integradores
             k3    = az(i) + k2 * dt/2.
             k4    = az(i) + k3 * dt
             vz(i) = vz(i) + dt * (k1/6. + k2/3. + k3/3. + k4/6.)
+            
+        END DO
         
         CALL a_str(eps,m,x,y,z,n,ax,ay,az)
         
-        END DO
     END DO
     END SUBROUTINE
     
