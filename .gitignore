@@ -102,3 +102,4 @@ ENV/
 aceleracion.so
 *.so
 *.o
+_data/
