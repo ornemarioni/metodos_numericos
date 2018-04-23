@@ -14,7 +14,7 @@ def epot(eps,x,y,z,m):
 
     for i in np.arange(n-1):
         for j in np.arange(i+1,n):
-            U[i,j] = G*m[j]/dist[i,j]
+            U[i,j] = G*m[j]*m[i]/dist[i,j]
             U[j,i] = U[i,j]
     
     return U
