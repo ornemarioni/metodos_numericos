@@ -9,6 +9,7 @@ def epot(eps,x,y,z,m):
     U = np.zeros((n,n))
     
     dx,dy,dz,masas = d.distancias(x,y,z,m)
+    
     dist = np.sqrt(dx**2 + dy**2 + dz**2 + eps**2)
 
     for i in np.arange(n-1):
