@@ -4,7 +4,8 @@ import aceleraciones as ac
 def DKD(eps,dt,nit,m,pos,vel,acel):
 
     #path = '/home/users/valeria/metodos_numericos/_data/DKD/'
-    path = '/home/ornela/metodos_numericos/_data/DKD/'
+    #path = '/home/ornela/metodos_numericos/_data/DKD/'
+    path = '/home/omarioni/metodos_numericos/_data/DKD/'
     
     pos[:,0] = pos[:,0] + vel[:,0]*dt*0.5
     pos[:,1] = pos[:,1] + vel[:,1]*dt*0.5
@@ -30,7 +31,8 @@ def DKD(eps,dt,nit,m,pos,vel,acel):
 def KDK(eps,dt,nit,m,pos,vel,acel):
     
     #path = '/home/users/valeria/metodos_numericos/_data/KDK/'
-    path = '/home/ornela/metodos_numericos/_data/KDK/'
+    #path = '/home/ornela/metodos_numericos/_data/KDK/'
+    path = '/home/omarioni/metodos_numericos/_data/KDK/'
     
     vel[:,0] = vel[:,0] + acel[:,0]*dt*0.5
     vel[:,1] = vel[:,1] + acel[:,1]*dt*0.5
