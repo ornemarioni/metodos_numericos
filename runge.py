@@ -2,6 +2,8 @@ import numpy as np
 import aceleraciones as ac
 
 def rungek(eps,dt,nit,m,pos,vel,acel):
+    #path = '/home/users/valeria/metodos_numericos/_data/runge/'
+    path = '/home/omarioni/metodos_numericos/_data/P2C/runge/'
     
     k1 = np.zeros(np.shape(vel))
     k2 = np.zeros(np.shape(vel))
@@ -28,8 +30,8 @@ def rungek(eps,dt,nit,m,pos,vel,acel):
         
         if i in np.arange(0,nit,10):
             
-            np.savetxt('/home/users/valeria/metodos_numericos/_data/runge/posiciones'+str('%s'%i)+'.dat',pos,fmt='%12.6f')
-            np.savetxt('/home/users/valeria/metodos_numericos/_data/runge/velocidades'+str('%s'%i)+'.dat',vel,fmt='%12.6f')
-            np.savetxt('/home/users/valeria/metodos_numericos/_data/runge/aceleraciones'+str('%s'%i)+'.dat',acel,fmt='%12.6f')    
+            np.savetxt(path + 'posiciones'+str('%s'%i)+'.dat',pos,fmt='%12.6f')
+            np.savetxt(path +'velocidades'+str('%s'%i)+'.dat',vel,fmt='%12.6f')
+            np.savetxt(path +'aceleraciones'+str('%s'%i)+'.dat',acel,fmt='%12.6f')    
     
     return pos, vel, acel
