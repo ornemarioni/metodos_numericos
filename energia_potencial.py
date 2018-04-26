@@ -17,4 +17,5 @@ def epot(eps,x,y,z,m):
             U[i,j] = G*m[j]*m[i]/dist[i,j]
             U[j,i] = U[i,j]
     
-    return U
+    Upot = np.sum(U,axis=0)
+    return Upot
