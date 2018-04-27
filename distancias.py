@@ -4,7 +4,7 @@ def distancias(x,y,z,m):
 
     n = len(m)
 
-    masas = np.ones((n,n))
+    mass2 = np.zeros((n,n))
     
     dx = np.zeros((n,n))
     dy = np.zeros((n,n))
@@ -12,18 +12,15 @@ def distancias(x,y,z,m):
     
     for i in range(0,n-1):
         for j in range(i+1,n):
-                dx[i,j] = x[i]-x[j]
-                dy[i,j] = y[i]-y[j]
-                dz[i,j] = z[i]-z[j]
+                dx[i,j] = x[j]-x[i]
+                dy[i,j] = y[j]-y[i]
+                dz[i,j] = z[j]-z[i]
                 
                 dx[j,i] = -dx[i,j]
                 dy[j,i] = -dy[i,j]
                 dz[j,i] = -dz[i,j]
                 
-                masas[i,j] = m[i]*m[j]
-                masas[j,i] = masas[i,j]
-
-    for i in range(0,n):
-        masas[i,i] = m[i]**2
+                mass2[i,j] = m[i]*m[j]
+                mass2[j,i] = mass2[i,j]
     
-    return dx,dy,dz,masas
+    return dx,dy,dz,mass2
