@@ -4,6 +4,9 @@ MODULE integradores
     
 !aceleracion
     SUBROUTINE a_str(eps,m,x,y,z,n,ax,ay,az)
+    
+    USE OMP_LIB
+    
     INTEGER, INTENT (IN):: n
     REAL, INTENT (IN)   :: x(n), y(n), z(n), m(n), eps
     REAL, INTENT (OUT)  :: ax(n), ay(n), az(n)
@@ -20,7 +23,15 @@ MODULE integradores
         ay(i) = 0.
         az(i) = 0.
     END DO
-    
+      
+      
+
+!$OMP PARALLEL DEFAULT(NONE) &
+!$OMP SHARED (n,x,y,z,eps,m,ax,ay,az,j) &
+!$OMP PRIVATE(i,dx,dy,dz,dist,acx,acy,acz)
+!$OMP DO SCHEDULE(DYNAMIC)
+
+
     DO i = 1, n
         DO j = 1, n
             dx = (x(j)-x(i))
@@ -43,6 +54,10 @@ MODULE integradores
             END IF
         END DO
     END DO
+    
+!$OMP END DO
+!$OMP END PARALLEL
+
     END SUBROUTINE
 
 !----------------------------------------------------------------------
@@ -61,7 +76,8 @@ MODULE integradores
 !f2py INTENT(IN,OUT) :: x(n), y(n), z(n)
 !f2py INTENT(IN,OUT) :: vx(n), vy(n), vz(n)
 !f2py INTENT(IN,OUT) :: ax(n), ay(n), az(n)
-       
+
+
     DO j = 1,nit
 
         DO i = 1,n
