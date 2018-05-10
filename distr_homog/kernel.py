@@ -20,3 +20,23 @@ def W(r,h):
             W[i] = 0.
     
     return W
+
+def dW(r,h):
+    #Gradiente del kernel
+    n=len(r)
+    
+    x = r/h
+    dW = np.zeros(n)
+    
+    for i in range(n):
+        
+        if 0.<= x[i] and x[i] < 1. :
+            dW[i] = 3 * ((0.75 * x[i]**2) - x[i]) / (np.pi * h**4)
+        
+        elif 1.<= x[i] and x[i] < 2. :
+            dW[i] = -3. * (2. - x[i])**2 / (4 * np.pi * h**4)
+        
+        else:
+            dW[i] = 0.
+    
+    return dW
